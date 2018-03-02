@@ -1,40 +1,40 @@
 #include <sys/stat.h>
 #include <iostream>
+#include <string>
 #include <sstream>
 #include <iomanip>
-#include<string>
-#include<sstream>
 #include "frameGenerator.h"
+#include "renderContext.h"
 
-
-FrameGenerator::
-FrameGenerator(SDL_Renderer* rend, SDL_Window*  win, int w, int h, 
-               const std::string& n) :
-  renderer(rend), 
-  window(win), 
-  WIDTH( w ),
-  HEIGHT( h ),
-  USERNAME( n )
+FrameGenerator::FrameGenerator() : 
+  rend(RenderContext::getInstance()->getRenderer()), 
+  window(RenderContext::getInstance()->getWindow()), 
+  WIDTH( Gamedata::getInstance().getXmlInt("view/width") ),
+  HEIGHT( Gamedata::getInstance().getXmlInt("view/height") ),
+  USERNAME( Gamedata::getInstance().getXmlStr("username") ),
+  MAX_FRAMES( Gamedata::getInstance().getXmlInt("maxFrames") ),
+  frameCount(0) 
 {
- struct stat info;
- if(stat("frames",&info)!=0){
-	 mkdir("frames", 0755);
- }
+  struct stat info;
+  if( stat( "frames", &info ) != 0 ) {
+    mkdir("frames", 0755);
+  }
 }
 
 
 void FrameGenerator::makeFrame() {
-	//Pixel Format is argb
+  if ( frameCount > MAX_FRAMES ) return;
+
   SDL_Surface* screenCap = SDL_GetWindowSurface(window);
   if ( screenCap ) {
-    SDL_RenderReadPixels(renderer, NULL, 
+    SDL_RenderReadPixels(rend, NULL, 
       SDL_GetWindowPixelFormat(window), 
       screenCap->pixels, screenCap->pitch); 
   }
-  
-  
   std::stringstream strm;
-  strm << "frames/" << USERNAME << ".bmp"; 
+  strm << "frames/" << USERNAME << '.' 
+       << std::setfill('0') << std::setw(4) 
+       << frameCount++ << ".bmp";
   std::string filename( strm.str() );
   std::cout << "Making frame: " << filename << std::endl;
   SDL_SaveBMP(screenCap, filename.c_str());
