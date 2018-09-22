@@ -21,7 +21,16 @@ OBJS = \
 	twoWaySprite.o\
 	vector2f.o \
 	clock.o \
+	player.o \
+	hud.o \
+	SmartEnemy.o \
+	collisonStrategy.o \
 	engine.o \
+	explodingSprite.o \
+	chunk.o \
+	bullet.o \
+	bulletpool.o \
+	Castle.o \
 	main.o
 EXEC = run
 

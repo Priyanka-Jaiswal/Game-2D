@@ -1,3 +1,7 @@
+#ifndef IOMOD__H
+#define IOMOD__H
+
+
 #include <iostream>
 #include <string>
 #include <SDL.h>
@@ -11,6 +15,7 @@ public:
   SDL_Surface* readSurface(const std::string& filename);
   void writeText(const std::string&, int, int) const;
   void writeText(const std::string&, const SDL_Color&,int, int) const;
+  void writeText(const std::string& msg, int x, int y,SDL_Color txtcolor, int fontSize) const ;
   SDL_Renderer* getRenderer() const { return renderer; }
 private:
   int init;
@@ -21,3 +26,5 @@ private:
   IoMod(const IoMod&);
   IoMod& operator=(const IoMod&);
 };
+#endif
+

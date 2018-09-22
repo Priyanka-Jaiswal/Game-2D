@@ -1,12 +1,16 @@
+#ifndef CLOCK__H
+#define CLOCK__H
+
 #include <SDL.h>
 #include <string>
 
 class Engine;
-
+class Hud;
 class Clock {
 public:
   static Clock& getInstance();
   unsigned int getTicks() const;
+  int getFps() const;
 
 private:
   friend class Engine;
@@ -34,7 +38,7 @@ private:
   unsigned int getFrames() const  { return frames;  }
   unsigned int getSeconds() const { return getTicks()/1000;  }
   unsigned int capFrameRate() const;
-  int getFps() const;
+  
 
   void startClock();
   void pause();
@@ -44,3 +48,5 @@ private:
   Clock(const Clock&);
   Clock&operator=(const Clock&);
 };
+#endif
+
